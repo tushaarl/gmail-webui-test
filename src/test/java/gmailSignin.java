@@ -1,9 +1,7 @@
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -30,7 +28,6 @@ public class gmailSignin {
         WebDriverWait wait = new WebDriverWait(driver,30);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("Passwd")));
         Assert.assertTrue("password box should present",driver.findElements(By.id("Passwd")).size()>0);
-
 
         WebElement passwordTextBox=driver.findElement(By.id("Passwd"));
         passwordTextBox.sendKeys("tushar7387985193");
@@ -71,9 +68,10 @@ public class gmailSignin {
 
         WebElement signInbutton=driver.findElement(By.id("signIn"));
         signInbutton.click();
+        driver.manage().window().maximize();
         //Verify user is Sign in
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.partialLinkText("Inbox")));
-        Assert.assertTrue("Inbox should present",driver.findElements(By.partialLinkText("Inbox")).size()>0);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//*[@id=':i3']")));
+        Assert.assertTrue("Inbox should present",driver.findElements(By.xpath(".//*[@id=':i3']")).size()>0);
         WebElement profileButton=driver.findElement(By.cssSelector("div[role='button'][gh='cm']"));
         profileButton.click();
 //Type the recepient
@@ -97,14 +95,14 @@ public class gmailSignin {
     sendbutton.click();
 
     //Click the inbox
-    wait.until(ExpectedConditions.visibilityOfElementLocated(By.partialLinkText("Inbox")));
-    Assert.assertTrue("Inbox should present",driver.findElements(By.partialLinkText("Inbox")).size()>0);
-    WebElement inboxLinkage=driver.findElement(By.partialLinkText("Inbox"));
+    wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//*[@id=':i3']")));
+    Assert.assertTrue("Inbox should present",driver.findElements(By.xpath(".//*[@id=':i3']")).size()>0);
+    WebElement inboxLinkage=driver.findElement(By.xpath(".//*[@id=':i3']"));
     inboxLinkage.click();
 
     //Check new email is received
-    wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//b[contains(text(),'Hi first automated subject box']")));
-    WebElement newMail=driver.findElement(By.xpath("//b[contains(text(),'Hi first automated subject box']"));
+    wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div [@class='y6']/span[contains(.,'Hi first automated subject box')]")));
+    WebElement newMail = driver.findElement(By.xpath("//div [@class='y6']/span[contains(.,'Hi first automated subject box')]"));
     newMail.click();
 
     //Verify email csubject and body
@@ -114,17 +112,19 @@ public class gmailSignin {
     WebElement bodyArea=driver.findElement(By.cssSelector("div[class='adn ads'] div[dir='ltr']"));
     Assert.assertEquals("Body text should be the same",body,bodyArea.getText());
     //Sign out
-    WebElement profileButton1=driver.findElement(By.cssSelector("span[class='gb_Wa gbii']"));
+    WebElement profileButton1=driver.findElement(By.cssSelector("span[class='gb_2a gbii']"));
     profileButton1.click();
 
     WebElement signOutButton=driver.findElement(By.id("gb_71"));
     signOutButton.click();
+    Alert alert = driver.switchTo().alert();
+    alert.accept();
 //Verify user is sign out
     wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("signIn")));
     Assert.assertTrue("password box should present",driver.findElements(By.id("signIn")).size()>0);
     }
     @After
     public void tearDown(){
-        driver.quit();
+        driver.close();
     }
 }
