@@ -106,6 +106,7 @@ public class gmailSignin {
     newMail.click();
 
     //Verify email csubject and body
+    wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h2[class='hP']")));
     WebElement subjectArea=driver.findElement(By.cssSelector("h2[class='hP']"));
     Assert.assertEquals("Subject should be the same", subject, subjectArea.getText());
 
@@ -114,13 +115,17 @@ public class gmailSignin {
     //Sign out
     WebElement profileButton1=driver.findElement(By.cssSelector("span[class='gb_2a gbii']"));
     profileButton1.click();
+    driver.findElement(By.id("gb_71")).click();
+    try{
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("signIn")));
+    } catch(org.openqa.selenium.UnhandledAlertException e){
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+        // you logic here what you want to do next
+    }
 
-    WebElement signOutButton=driver.findElement(By.id("gb_71"));
-    signOutButton.click();
-    Alert alert = driver.switchTo().alert();
-    alert.accept();
 //Verify user is sign out
-    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("signIn")));
+
     Assert.assertTrue("password box should present",driver.findElements(By.id("signIn")).size()>0);
     }
     @After
